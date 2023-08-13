@@ -23,6 +23,7 @@ namespace SalesWebMvc.Controllers
             ViewData["Message"] = "Salles Web MVC App from C# Course";
             ViewData["Aluno"] = "José Edson Jr";
             ViewData["Professor"] = "Nelio Alves";
+            ViewData["Email"] = "edsonjunior9701@outlook.com";
 
             return View();
         }
