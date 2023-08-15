@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using SalesWebMvc.Data;
+using System.Globalization;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionStringMysql = builder.Configuration.GetConnectionString("SalesWebMvcContext");
 builder.Services.AddDbContext<SalesWebMvcContext>(options => options.UseMySql(connectionStringMysql, ServerVersion.Parse("8.0.34-mysql")));
 
+builder.Services.AddScoped<SeedingService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -26,7 +30,10 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.Services.CreateScope().ServiceProvider.GetRequiredService<SeedingService>().Seed();
+
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
