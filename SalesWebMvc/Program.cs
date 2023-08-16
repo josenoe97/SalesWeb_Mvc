@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using SalesWebMvc.Data;
+using SalesWebMvc.Services;
 using System.Globalization;
 
 
@@ -16,6 +17,7 @@ var connectionStringMysql = builder.Configuration.GetConnectionString("SalesWebM
 builder.Services.AddDbContext<SalesWebMvcContext>(options => options.UseMySql(connectionStringMysql, ServerVersion.Parse("8.0.34-mysql")));
 
 builder.Services.AddScoped<SeedingService>();
+builder.Services.AddScoped<SellerService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
