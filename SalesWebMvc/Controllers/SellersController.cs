@@ -34,8 +34,14 @@ namespace SalesWebMvc.Controllers
         /*Notações*/
         [HttpPost] /*Indica que é uma ação de post e não de get*/
         [ValidateAntiForgeryToken] /*previne ataques crfs(autenticação)*/
-        public IActionResult Create(Seller seller)
+        public IActionResult Create(Seller seller) // não aceita requisição(Ex: cadastros em branco) mesmo com JS desabilitado
         {
+            if (!ModelState.IsValid)
+            {
+                var departments = _departmentService.FindAll();
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+                return View(seller);
+            }
             _sellerService.Insert(seller);
             return RedirectToAction(nameof(Index));
         }
@@ -92,7 +98,7 @@ namespace SalesWebMvc.Controllers
             {
                 return RedirectToAction(nameof(Error), new { menssage = "Id not found" });
             }
-                List<Department> departments = _departmentService.FindAll();
+            List<Department> departments = _departmentService.FindAll();
             SellerFormViewModel viewModel = new SellerFormViewModel { Seller = obj, Departments = departments };
             return View(viewModel);
         }
@@ -101,7 +107,14 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Seller seller)
         {
-            if(id != seller.Id)
+            if (!ModelState.IsValid)
+            {
+                var departments = _departmentService.FindAll();
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+                return View(seller);
+            }
+
+            if (id != seller.Id)
             {
                 return RedirectToAction(nameof(Error), new { menssage = "Id mismatch" });
             }
